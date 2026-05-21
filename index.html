@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>VelvetRopeDaily</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap"/>
+<style>
+  :root {
+    --black: #080808;
+    --dark: #101010;
+    --dark2: #161616;
+    --panel: #131313;
+    --border: #252525;
+    --gold: #c9a84c;
+    --gold2: #e8c96a;
+    --gold3: #f5e6b0;
+    --silver: #b8b8c8;
+    --cream: #f0ebe0;
+    --text: #ddd8cc;
+    --muted: #7a7670;
+    --display: 'Playfair Display', Georgia, serif;
+    --body: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Montserrat', Helvetica, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    background-image: radial-gradient(ellipse at 30% 0%, rgba(201,168,76,0.04) 0%, transparent 50%);
+  }
+
+  /* TOP BAR */
+  .top-bar {
+    background: var(--dark);
+    border-bottom: 1px solid #1a1a1a;
+    padding: 5px 24px;
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .top-bar-l { color: var(--gold); }
+  .top-bar-r { color: var(--muted); }
+
+  /* GOLD MARQUEE */
+  .marquee-wrap { background: var(--gold); overflow: hidden; padding: 5px 0; }
+  .marquee-inner {
+    display: flex; gap: 50px;
+    animation: marquee 45s linear infinite;
+    width: max-content;
+  }
+  .mi {
+    font-family: var(--sans); font-size: 10px; font-weight: 700;
+    color: var(--black); white-space: nowrap;
+    text-transform: uppercase; letter-spacing: 2px;
+  }
+  .md { color: rgba(0,0,0,0.35); margin: 0 6px; }
+  @keyframes marquee { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+
+  /* MASTHEAD */
+  .masthead {
+    background: var(--dark);
+    text-align: center;
+    padding: 44px 20px 32px;
+    border-bottom: 3px solid var(--gold);
+    position: relative; overflow: hidden;
+  }
+  .masthead::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.1) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .masthead-eyebrow {
+    font-family: var(--sans); font-size: 9px;
+    letter-spacing: 6px; text-transform: uppercase; color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .masthead-name {
+    font-family: var(--display);
+    font-size: clamp(40px, 7vw, 100px);
+    font-weight: 900; letter-spacing: -2px; line-height: 0.9;
+    color: var(--cream);
+    text-shadow: 0 2px 40px rgba(201,168,76,0.25);
+  }
+  .masthead-name span { color: var(--gold); font-style: italic; }
+  .masthead-rule {
+    display: flex; align-items: center; gap: 16px;
+    margin: 18px auto; max-width: 600px;
+  }
+  .masthead-rule::before, .masthead-rule::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .masthead-star { color: var(--gold); font-size: 14px; letter-spacing: 8px; }
+  .masthead-tagline {
+    font-family: var(--body); font-style: italic;
+    font-size: 16px; color: var(--silver); letter-spacing: 2px;
+  }
+  .masthead-date {
+    font-family: var(--sans); font-size: 10px;
+    color: var(--muted); margin-top: 12px; letter-spacing: 1px;
+  }
+
+  /* NAV */
+  .main-nav {
+    background: #0d0d0d; border-bottom: 1px solid var(--border);
+    display: flex; overflow-x: auto; padding: 0 20px;
+  }
+  .nav-tab {
+    font-family: var(--sans); font-size: 10px; font-weight: 600;
+    color: var(--muted); padding: 13px 20px; cursor: pointer;
+    border: none; background: none; text-transform: uppercase;
+    letter-spacing: 1.5px; border-bottom: 2px solid transparent;
+    white-space: nowrap; transition: color 0.15s, border-color 0.15s;
+  }
+  .nav-tab:hover { color: var(--gold); }
+  .nav-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* LAYOUT */
+  .site-wrap { max-width: 1440px; margin: 0 auto; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* NEWS LAYOUT */
+  .news-layout {
+    display: grid; grid-template-columns: 1fr 290px; gap: 0; min-height: 80vh;
+  }
+  .news-main { border-right: 1px solid var(--border); }
+  .news-sidebar { background: var(--panel); }
+
+  /* CAT FILTER */
+  .cat-filter {
+    background: var(--dark2); border-bottom: 1px solid var(--border);
+    padding: 10px 20px; display: flex; gap: 6px; overflow-x: auto;
+  }
+  .cat-btn {
+    font-family: var(--sans); font-size: 9px; font-weight: 600;
+    color: var(--muted); background: transparent;
+    border: 1px solid var(--border); padding: 5px 13px;
+    cursor: pointer; white-space: nowrap; text-transform: uppercase;
+    letter-spacing: 1px; transition: all 0.15s;
+  }
+  .cat-btn:hover, .cat-btn.active {
+    background: var(--gold); color: var(--black); border-color: var(--gold);
+  }
+
+  /* ARTICLE GRID — magazine style with images */
+  .articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1px; background: var(--border);
+  }
+  .article-card {
+    background: var(--dark); text-decoration: none; color: var(--text);
+    display: flex; flex-direction: column;
+    transition: background 0.15s; border-left: 3px solid transparent;
+  }
+  .article-card:hover { background: #1a1a1a; border-left-color: var(--gold); }
+
+  /* Image area */
+  .card-img {
+    width: 100%; height: 180px;
+    background-size: cover; background-position: center top;
+    background-color: #1a1a1a;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .card-img::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 60px;
+    background: linear-gradient(transparent, var(--dark));
+  }
+
+  /* Card body */
+  .card-body { padding: 16px 20px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .card-source {
+    font-family: var(--sans); font-size: 9px; color: var(--gold);
+    text-transform: uppercase; letter-spacing: 1.5px;
+  }
+  .card-title {
+    font-family: var(--display); font-size: 16px; font-weight: 700;
+    line-height: 1.3; color: var(--cream);
+  }
+  .article-card:hover .card-title { color: var(--gold2); }
+  .card-summary {
+    font-family: var(--body); font-size: 14px; color: #9a9690;
+    line-height: 1.6; flex: 1;
+  }
+  .card-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--border); padding-top: 10px; margin-top: 4px;
+  }
+  .card-date { font-family: var(--sans); font-size: 9px; color: var(--muted); }
+  .card-read { font-family: var(--sans); font-size: 9px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
+
+  .cat-header { padding: 20px 24px 8px; border-bottom: 1px solid var(--border); }
+  .cat-header h2 {
+    font-family: var(--display); font-size: 26px; font-weight: 700;
+    font-style: italic; color: var(--cream);
+  }
+
+  /* SIDEBAR */
+  .sidebar-section { border-bottom: 1px solid var(--border); padding: 20px; }
+  .sidebar-title {
+    font-family: var(--sans); font-size: 9px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 2px; color: var(--gold);
+    margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+  }
+  .trending-item {
+    display: flex; gap: 12px; padding: 8px 0;
+    border-bottom: 1px solid #1a1a1a; align-items: flex-start;
+  }
+  .trending-num {
+    font-family: var(--display); font-size: 22px; font-weight: 900;
+    color: #2a2a2a; line-height: 1; min-width: 26px;
+  }
+  .trending-title { font-family: var(--body); font-size: 13px; color: var(--silver); line-height: 1.4; }
+
+  /* AWARDS PAGE */
+  .data-page { padding: 36px 28px; }
+  .data-page h1 {
+    font-family: var(--display); font-size: 38px; font-style: italic;
+    font-weight: 700; color: var(--cream); margin-bottom: 6px;
+  }
+  .data-page .subtitle {
+    font-family: var(--sans); font-size: 10px; color: var(--muted);
+    margin-bottom: 28px; text-transform: uppercase; letter-spacing: 2px;
+  }
+  .data-table {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+    background: var(--dark); border: 1px solid var(--border);
+  }
+  .data-table th {
+    background: #0d0d0d; color: var(--gold);
+    font-family: var(--sans); font-size: 9px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--gold);
+  }
+  .data-table td { padding: 13px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .data-table tr:hover td { background: #1a1a1a; }
+  .award-name {
+    font-family: var(--display); font-style: italic; font-size: 16px; color: var(--cream);
+  }
+  .cat-pill {
+    border: 1px solid; padding: 3px 10px;
+    font-family: var(--sans); font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  /* ABOUT */
+  .about-wrap { max-width: 720px; margin: 48px auto; padding: 0 28px 80px; }
+  .about-wrap h1 {
+    font-family: var(--display); font-size: 42px; font-style: italic;
+    color: var(--cream); margin-bottom: 10px;
+  }
+  .about-wrap p { font-family: var(--body); font-size: 16px; line-height: 1.8; color: #aaa; margin-bottom: 16px; }
+
+  /* FOOTER */
+  .site-footer {
+    background: var(--dark); border-top: 2px solid #1a1a1a;
+    text-align: center; padding: 32px 20px;
+    font-family: var(--sans); font-size: 10px; color: var(--muted);
+    letter-spacing: 1px; line-height: 2.2;
+  }
+  .footer-logo { font-family: var(--display); font-size: 26px; font-style: italic; color: var(--gold); margin-bottom: 6px; }
+
+  @media (max-width: 768px) {
+    .news-layout { grid-template-columns: 1fr; }
+    .news-sidebar { display: none; }
+    .articles-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="top-bar-l">✦ VelvetRopeDaily.com ✦</span>
+  <span class="top-bar-r">Updated: May 21, 2026 · 20:59 UTC</span>
+</div>
+
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <span class="mi">Hollywood<span class="md">✦</span></span>
+    <span class="mi">Broadway<span class="md">✦</span></span>
+    <span class="mi">Nashville<span class="md">✦</span></span>
+    <span class="mi">West End<span class="md">✦</span></span>
+    <span class="mi">Celebrity<span class="md">✦</span></span>
+    <span class="mi">Awards<span class="md">✦</span></span>
+    <span class="mi">Box Office<span class="md">✦</span></span>
+    <span class="mi">Reviews<span class="md">✦</span></span>
+    <span class="mi">Music<span class="md">✦</span></span>
+    <span class="mi">Streaming<span class="md">✦</span></span>
+    <span class="mi">Hollywood<span class="md">✦</span></span>
+    <span class="mi">Broadway<span class="md">✦</span></span>
+    <span class="mi">Nashville<span class="md">✦</span></span>
+    <span class="mi">West End<span class="md">✦</span></span>
+    <span class="mi">Celebrity<span class="md">✦</span></span>
+    <span class="mi">Awards<span class="md">✦</span></span>
+    <span class="mi">Box Office<span class="md">✦</span></span>
+    <span class="mi">Reviews<span class="md">✦</span></span>
+    <span class="mi">Music<span class="md">✦</span></span>
+    <span class="mi">Streaming<span class="md">✦</span></span>
+  </div>
+</div>
+
+<div class="masthead">
+  <div class="masthead-eyebrow">Est. 2026 · The Global Entertainment Daily</div>
+  <div class="masthead-name"><span>Velvet</span>RopeDaily</div>
+  <div class="masthead-rule"><span class="masthead-star">✦ ✦ ✦</span></div>
+  <div class="masthead-tagline">Hollywood · Broadway · Nashville · West End · Celebrity · Awards</div>
+  <div class="masthead-date">May 21, 2026 · 20:59 UTC</div>
+</div>
+
+<nav style="background:#0d0d0d;border-bottom:1px solid #1e1e1e;">
+  <div class="site-wrap">
+    <div class="main-nav">
+      <button class="nav-tab active" onclick="showPage('news',this)">News</button>
+      <button class="nav-tab" onclick="showPage('awards',this)">Awards Calendar</button>
+      <button class="nav-tab" onclick="showPage('about',this)">About</button>
+    </div>
+  </div>
+</nav>
+
+<div class="site-wrap">
+
+  <div class="page active" id="page-news">
+    <div class="cat-filter"><button class="cat-btn active" onclick="showCat('hollywood')" id="catbtn-hollywood">Hollywood</button>
+<button class="cat-btn " onclick="showCat('broadway')" id="catbtn-broadway">Broadway</button>
+<button class="cat-btn " onclick="showCat('nashville-and-country')" id="catbtn-nashville-and-country">Nashville & Country</button>
+<button class="cat-btn " onclick="showCat('west-end-and-london')" id="catbtn-west-end-and-london">West End & London</button>
+<button class="cat-btn " onclick="showCat('celebrity')" id="catbtn-celebrity">Celebrity</button>
+<button class="cat-btn " onclick="showCat('movies')" id="catbtn-movies">Movies</button>
+<button class="cat-btn " onclick="showCat('tv-and-streaming')" id="catbtn-tv-and-streaming">TV & Streaming</button>
+<button class="cat-btn " onclick="showCat('music')" id="catbtn-music">Music</button>
+<button class="cat-btn " onclick="showCat('awards')" id="catbtn-awards">Awards</button>
+<button class="cat-btn " onclick="showCat('box-office')" id="catbtn-box-office">Box Office</button>
+<button class="cat-btn " onclick="showCat('reviews')" id="catbtn-reviews">Reviews</button>
+</div>
+    <div class="news-layout">
+      <div class="news-main">
+        <div class="cat-section" id="cat-hollywood" style="display:block">
+          <div class="cat-header"><h2>Hollywood</h2></div>
+          <div class="articles-grid">
+    <a class="article-card" href="https://variety.com/2026/biz/news/korean-content-cj-enm-hybe-extraordinary-attorney-woo-1236756341/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/DSC04444-e1779396062160.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Korean Content Leaders Take Stock After a Decade of Growth and Look to Future: ‘Korean Entertainment is Everywhere’</div>
+        <div class="card-summary">The world of Korean entertainment has come a long way since “Gangnum Style” set dancers galloping around the world nearly 15 years ago. Korean content industry leaders on both sides of the Pacific gat...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/artisans/news/stranger-things-chad-powers-prosthetics-and-transformations-1236755996/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/HNDO_S2_201_FG_00125413_Still105.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">How ‘Fallout,’ ‘Chad Powers and ‘Stranger Things’ Makeup and VFX Artists Went all in on Prosthetics and Transformations</div>
+        <div class="card-summary">This season, makeup artists have transformed actors using everything from sublime touches to complete prosthetics. Underneath it all, no matter how many hours and prosthetic pieces, they have one comm...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/film/news/johnny-depp-day-drinker-release-date-1236756113/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2025/04/DayDrinker_Niete_11042025_DSC0440RC_Crop3-e1744668246341.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Johnny Depp, Penelope Cruz’s Action Thriller ‘Day Drinker’ Sets 2027 Release Date</div>
+        <div class="card-summary">&#8220;Day Drinker,&#8221; an action thriller starring Johnny Depp and Penélope Cruz, will sail to theaters in 2027. Lionsgate, which is releasing the film, has set a release of March 26, 2027. &#8220...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/film/news/resurrection-of-the-christ-first-look-release-date-delay-mel-gibson-1236756143/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/ELX_8662-2R_Crop_EDITR3.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Mel Gibson Unveils ‘Resurrection of the Christ’ First Look, Delays Release Dates for Two-Part Biblical Epic</div>
+        <div class="card-summary">Mel Gibson has unveiled the first look at &#8220;The Resurrection of the Christ,&#8221; the director&#8217;s long-delayed follow-up to 2004’s “The Passion of the Christ.&#8221; Filming on the two-part...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/film/festivals/penelope-cruz-los-javis-queer-garcia-lorca-epic-the-black-ball-cannes-ovation-1236741563/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/The-Black-Ball-crew.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Penelope Cruz Lights up Los Javis’ Queer García Lorca Epic ‘The Black Ball,’ Earning 16-Minute Cannes Ovation</div>
+        <div class="card-summary">Javier Ambrossi and Javier Calvo&#8217;s &#8220;The Black Ball&#8221; (La Bola Negra) a queer epic spanning 85 years of Spanish history and inspired by an unfinished fragment by Federico García Lorca,...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/gaming/news/gta-5-no-delay-price-marketing-summer-1236755303/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2025/08/Grand-Theft-Auto-6-GTA.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">‘GTA 6’ Price Still Not Revealed, but Take-Two Chief Says Rockstar on Track to Begin Marketing This Summer</div>
+        <div class="card-summary">Rockstar Games&#8217; &#8220;Grand Theft Auto 6&#8221; is still on track for its Nov. 19 release but does not yet have an announced price. And that reveal isn&#8217;t coming along with parent company ...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.hollywoodreporter.com/tv/tv-news/trey-parker-south-park-scarier-trump-military-1236603652/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">hollywoodreporter.com</div>
+        <div class="card-title">Trey Parker Admits “It’s Scarier” to Do ‘South Park’ in the Trump Era: “That Group Has a Military”</div>
+        <div class="card-summary">'South Park' was honored alongside 'Adolescence,' 'Deaf President Now!,' 'Dying for Sex,' 'Heated Rivalry' and 'Seen &#38; Heard: The History of Black Television' at the TV Academy Honors ceremony....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.hollywoodreporter.com/news/general-news/sinners-house-halloween-horror-nights-2026-1236603746/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">hollywoodreporter.com</div>
+        <div class="card-title">‘Sinners’ House to Sink Its Teeth Into Halloween Horror Nights 2026</div>
+        <div class="card-summary">Universal Orlando Resort and Universal Studios Hollywood will transport fans of the Oscar-winning box office hit from writer-director-producer Ryan Coogler to 1930s Mississippi Delta with Smoke, Stack...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.hollywoodreporter.com/tv/tv-features/off-campus-dean-allie-stephen-kalyn-season-one-interview-1236603001/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">hollywoodreporter.com</div>
+        <div class="card-title">‘Off Campus’ Star Stephen Kalyn on Next Addictive Hockey Romance and Those “Heartfelt Moments”</div>
+        <div class="card-summary">The 28-year-old actor digs into where viewers find his character, Dean, coming into season one and how Mika Abdalla’s Allie turns everything upside down: “Dean always gets what he wants, but Allie put...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.hollywoodreporter.com/business/business-news/lionsgate-q4-profit-higher-revenues-2-1236603595/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">hollywoodreporter.com</div>
+        <div class="card-title">Lionsgate Swings to Quarterly Profit on Higher Revenues</div>
+        <div class="card-summary">The ‘Michael’ and 'Hunger Games' studio, led by CEO Jon Feltheimer, became a standalone company after splitting from the Starz premium cable and streaming service....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a></div>
+        </div>
+        <div class="cat-section" id="cat-broadway" style="display:none">
+          <div class="cat-header"><h2>Broadway</h2></div>
+          <div class="articles-grid">
+    <a class="article-card" href="https://www.broadwayworld.com/houston/article/Photos-First-Look-at-Kyra-Kennedy-and-More-in-BEAUTIFUL-at-TUTS-20260521" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://cloudimages.broadwayworld.com/columnpiccloud/300-8127486bd9a07ed1b060fd17b73278cb.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">broadwayworld.com</div>
+        <div class="card-title">Photos: First Look at Kyra Kennedy and More in BEAUTIFUL at TUTS</div>
+        <div class="card-summary">You can now get a first look at production photos of Beautiful: The Carole King Musical at Theatre Under The Stars, now playing at the Hobby Center....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.broadwayworld.com/article/TWO-STRANGERS-CARRY-A-CAKE-ACROSS-NEW-YORK-to-Launch-North-American-Tour-in-Fall-2027-20260521" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://cloudimages.broadwayworld.com/columnpiccloud/200200-499b8d3ea946e48410937f07fd0cce32.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">broadwayworld.com</div>
+        <div class="card-title">TWO STRANGERS (CARRY A CAKE ACROSS NEW YORK) to Launch North American Tour in Fall 2027</div>
+        <div class="card-summary">Two Strangers (Carry a Cake Across New York) will launch a North American Tour in the fall of 2027. The production will open in Rhode Island, before touring to cities across the U.S. and Canada....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.broadwayworld.com/bwwtv/article/Everything-to-Know-About-the-2026-AMAS-How-to-Watch-Whos-Performing-More-20260521" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://cloudimages.broadwayworld.com/columnpiccloud/200200-92a60ea9930d3c84e75fae4108104b89.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">broadwayworld.com</div>
+        <div class="card-title">Everything to Know About the 2026 AMAS: How to Watch, Who's Performing, & More</div>
+        <div class="card-summary">The 52nd American Music Awards (AMAs) will take place next week, honoring an array of influential artists and songs. Find out everything to know about the ceremony, including who&apos;s hosting, who&a...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.broadwayworld.com/washington-dc/article/Review-PIPPIN-at-Signature-Theatre-20260521" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://cloudimages.broadwayworld.com/columnpiccloud/200200-c5446708526773762299f8202bf93d0f.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">broadwayworld.com</div>
+        <div class="card-title">Review: PIPPIN at Signature Theatre</div>
+        <div class="card-summary">Certain facets of the human condition are foundational to our very existence â€' change, connection, desire. One such particularly toxic universal truth is a constant need to be something more than we...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.broadwayworld.com/bwwtv/article/ALMAS-WAY-SUMMERTIME-MUSICAL-Soundtrack-Releasing-This-Friday-20260521" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://cloudimages.broadwayworld.com/columnpiccloud/200200-444d8bc16f8ba5b08001437ec64fc015.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">broadwayworld.com</div>
+        <div class="card-title">ALMA’S WAY SUMMERTIME MUSICAL Soundtrack Releasing This Friday</div>
+        <div class="card-summary">The music from Alma&apos;s Way Summertime Musical will be released as a full soundtrack album this Friday, May 22. The album features contributions from a roster of artists, including Pierce Freelon, ...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.broadwayworld.com/new-jersey/article/Cast-Set-for-NEWSIES-at-Vanguard-Theater-This-Summer-20260521" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://cloudimages.broadwayworld.com/columnpiccloud/200200-595d65411699419aafe99ca778df735c.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">broadwayworld.com</div>
+        <div class="card-title">Cast Set for NEWSIES at Vanguard Theater This Summer</div>
+        <div class="card-summary">Vanguard Theater revealed the full cast for its upcoming production of Disney&apos;s Newsies, closing the company&apos;s 10th Anniversary season in Montclair, NJ, directed by Founding Artistic Directo...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2025/theater/news/k-entertainment-freelancers-pay-crisis-1236468676/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2023/06/UK-Theater-freelancer-placeholder.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Crisis Deepens for U.K. Entertainment Freelancers as 44% Earn Below Living Wage</div>
+        <div class="card-summary">U.K. entertainment freelancers are facing an unprecedented crisis, with nearly half earning below the legal minimum wage, according to the final Big Freelancer Survey released Thursday by Freelancers ...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 24 Jul 2025</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2023/legit/global/uk-theater-freelance-report-1235650527/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2023/06/UK-Theater-freelancer-placeholder.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Undervalued, Underpaid and Underappreciated – Report Paints Bleak Picture of U.K. Theater Freelance Sector Under Siege</div>
+        <div class="card-summary">A comprehensive report published by Freelancers Make Theatre Work (FMTW) sheds light on critical challenges faced by the freelance theater workforce in the U.K. The survey, conducted between March and...</div>
+        <div class="card-footer">
+          <span class="card-date">Wed, 21 Jun 2023</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2021/theater/news/love-actually-the-unauthorized-musical-parody-returning-off-broadway-1235059960/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2021/09/Love-Actually-Parody-artwork-horizontal.png')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">‘Love Actually? The Unauthorized Musical Parody’ Returning to Off-Broadway (EXCLUSIVE)</div>
+        <div class="card-summary">&#8220;Love Actually? The Unauthorized Musical Parody,&#8221; a sendup of the beloved Richard Curtis rom-com classic, will return to the stage. The Off-Broadway production, which is produced by Right ...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 09 Sep 2021</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2021/film/global/cinemas-theaters-england-full-capacity-1235011878/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2021/07/Boris-Johnson.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Cinemas, Theaters in England Will Return to Full Capacity From July 19, Says U.K. Prime Minister Boris Johnson</div>
+        <div class="card-summary">Cinemas and theaters across England will return to full capacity from July 19, U.K. Prime Minister Boris Johnson said on Monday. In addition, live events such as sports and concerts will be allowed to...</div>
+        <div class="card-footer">
+          <span class="card-date">Mon, 05 Jul 2021</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a></div>
+        </div>
+        <div class="cat-section" id="cat-nashville-and-country" style="display:none">
+          <div class="cat-header"><h2>Nashville & Country</h2></div>
+          <div class="articles-grid">
+    <a class="article-card" href="https://www.billboard.com/music/country/ian-munsicks-ove-is-blind-makin-tracks-1236253313/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">billboard.com</div>
+        <div class="card-title">Ian Munsick’s Guitar Fiddling Leads to His Triple Tigers Bow With ‘Love Is Blind’: ‘My Biggest M.O. As an Artist Is to Make It Feel Like Me’</div>
+        <div class="card-summary">Billboard's Makin' Tracks column looks at the writing and recording behind Ian Munsick's "Love Is Blind."...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.billboard.com/music/country/jelly-roll-official-theme-song-2026-stanley-cup-playoffs-1236253012/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">billboard.com</div>
+        <div class="card-title">Jelly Roll Urges NHL Stars to ‘Rise Up’ With 2026 Stanley Cup Playoffs Anthem: ‘This Is Their Song’</div>
+        <div class="card-summary">The Amazon Music Original song will be featured in game broadcasts, in-arena integrations and across social media and NHL digital channels....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.billboard.com/music/country/chicks-natalie-maines-blasts-donald-trump-social-media-post-1236252095/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">billboard.com</div>
+        <div class="card-title">The Chicks’ Natalie Maines Blasts Donald Trump in Scathing Message: ‘Our Democracy Is Disappearing Right Before Our Eyes’</div>
+        <div class="card-summary">Maines calls Trump a "fugly slut" in her Instagram caption....</div>
+        <div class="card-footer">
+          <span class="card-date">Tue, 19 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.billboard.com/music/country/billboard-country-live-2026-lineup-adds-chase-rice-band-perry-1236251439/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">billboard.com</div>
+        <div class="card-title">Billboard Country Live Adds Chase Rice, Drew Baldridge, The Band Perry, Corey Kent & More to Nashville Lineup</div>
+        <div class="card-summary">Hunter Hayes, Lanie Gardner, The Grimm, Ty Myers, Alana Springsteen, Alexandra Kay, Ashley Cooke, Braxton Keith, Kaitlin Butts, Priscilla Block, Something Out West &#38; Stella Lefty also join lineup....</div>
+        <div class="card-footer">
+          <span class="card-date">Tue, 19 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.billboard.com/music/country/tyler-hubbard-florida-georgia-line-shows-1236250899/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">billboard.com</div>
+        <div class="card-title">Tyler Hubbard Says Florida Georgia Line ‘Toying Around’ With the Idea of Playing A Few Shows in 2027</div>
+        <div class="card-summary">On the red carpet at the ACMs, Hubbard spoke about his time hanging out with Brian Kelley and whether there could be new music on the way....</div>
+        <div class="card-footer">
+          <span class="card-date">Mon, 18 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.billboard.com/music/country/ella-langley-be-her-acoustic-acm-awards-1236250350/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">billboard.com</div>
+        <div class="card-title">Ella Langley Unplugs ‘Be Her’ for Gorgeous Acoustic ACM Awards Performance</div>
+        <div class="card-summary">Langley gave the now-No. 2 Billboard Hot 100 hit its award show debut with a surprisingly moving stripped-down performance....</div>
+        <div class="card-footer">
+          <span class="card-date">Mon, 18 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://tasteofcountry.com/stella-lefty-boston-lyrics/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://townsquare.media/site/204/files/2026/05/attachment-stella-lefty-boston-song.jpg?format=natural')"></div>
+      <div class="card-body">
+        <div class="card-source">tasteofcountry.com</div>
+        <div class="card-title">Stella Lefty, 'Boston' Lyrics Describe a Love We All Dream Of</div>
+        <div class="card-summary">Matt Winkelmeyer, Getty Images...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://tasteofcountry.com/kenny-rogers-first-number-one-hit-lucille/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://townsquare.media/site/204/files/2018/06/kenny-rogers-first-number-one-hit.jpg?format=natural')"></div>
+      <div class="card-body">
+        <div class="card-source">tasteofcountry.com</div>
+        <div class="card-title">Kenny Rogers Turned His Career Around With One Classic Hit</div>
+        <div class="card-summary">Scott Gries, Getty Images...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://tasteofcountry.com/lainey-wilson-funny-dad-story-meeting-miranda-lambert/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://townsquare.media/site/204/files/2026/05/attachment-untitled-design-2026-05-21t063536-616.jpg?format=natural')"></div>
+      <div class="card-body">
+        <div class="card-source">tasteofcountry.com</div>
+        <div class="card-title">Lainey Wilson Shares Dad's Embarrassing Miranda Lambert Moment</div>
+        <div class="card-summary">Getty Images...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://tasteofcountry.com/watch-jelly-roll-stand-up-comedy/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://townsquare.media/site/204/files/2026/05/attachment-jellyroll-110.jpg?format=natural')"></div>
+      <div class="card-body">
+        <div class="card-source">tasteofcountry.com</div>
+        <div class="card-title">Jelly Roll Does a Standup Comedy Set in LA</div>
+        <div class="card-summary">Jerod Harris, Getty Images...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a></div>
+        </div>
+        <div class="cat-section" id="cat-west-end-and-london" style="display:none">
+          <div class="cat-header"><h2>West End & London</h2></div>
+          <div class="articles-grid">
+    <a class="article-card" href="https://www.theguardian.com/stage/2026/may/21/quartet-in-autumn-review-arcola-theatre-london" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">theguardian.com</div>
+        <div class="card-title">Quartet in Autumn review – Samantha Harvey gives new life to Barbara Pym tale of imminent retirement</div>
+        <div class="card-summary">Arcola theatre, LondonThe 70s novel about the everyday grumbles of four office workers remains just as relevant, playfully staged by director Dominic DromgooleIt’s no wonder why Barbara Pym’s bittersw...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.theguardian.com/stage/2026/may/21/care-review-young-vic-london-dementia" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">theguardian.com</div>
+        <div class="card-title">Care review – this searing portrayal of dementia raises urgent questions for us all</div>
+        <div class="card-summary">Young Vic, LondonAlexander Zeldin’s devastating play depicts the gruelling loneliness and confusion of life in a care homeAlexander Zeldin’s characters often inhabit the margins, from zero-hours worke...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.theguardian.com/stage/2026/may/20/astell-and-woolf-review-feminists-live-theatre-newcastle" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">theguardian.com</div>
+        <div class="card-title">Astell and Woolf review – feminist writers unite and share a sherry in the afterlife</div>
+        <div class="card-summary">Live theatre, NewcastleIn Shelagh Stephenson’s spiky comedy, Virginia Woolf and Mary Astell become celestial companions, discussing religion, science and independenceMary Astell is not known for her k...</div>
+        <div class="card-footer">
+          <span class="card-date">Wed, 20 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.theguardian.com/stage/2026/may/19/grayson-perry-musical-soho-theatre-walthamstow-london" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">theguardian.com</div>
+        <div class="card-title">Grayson Perry’s life story to be told in ‘outrageous’ musical</div>
+        <div class="card-summary">Grayson the Musical will explore ‘identity, creativity and self-acceptance … with life coaching from a six-foot teddy bear named Alan’Grayson Perry’s life story is to be told in an “outrageous” new st...</div>
+        <div class="card-footer">
+          <span class="card-date">Tue, 19 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.theguardian.com/books/2026/may/21/stephen-sondheim-by-daniel-okrent-review-a-superb-biography-of-the-musical-master" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">theguardian.com</div>
+        <div class="card-title">Stephen Sondheim by Daniel Okrent review – a superb biography of the musical master</div>
+        <div class="card-summary">Packed with gossip and incident, this book is also a fascinating study in the gestation of geniusAmong the many great pleasures of Daniel Okrent’s new biography of Stephen Sondheim – a book perfectly ...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.theguardian.com/stage/2026/may/19/stranger-things-gaten-matarazzo-west-end-debut-rent-revival-jonathan-larson-duke-of-york-theatre-luke-sheppard" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">theguardian.com</div>
+        <div class="card-title">Stranger Things star Gaten Matarazzo to make West End debut in Rent revival</div>
+        <div class="card-summary">A ‘thrillingly fresh’ 30th-anniversary production of Jonathan Larson’s musical will open at the Duke of York’s theatre in London, directed by Luke SheppardThe Pulitzer prize-winning musical Rent will ...</div>
+        <div class="card-footer">
+          <span class="card-date">Tue, 19 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.standard.co.uk/culture/theatre/care-at-young-vic-review-b1283041.html" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">standard.co.uk</div>
+        <div class="card-title">CARE at Young Vic: A singular, compassionate piece of work</div>
+        <div class="card-summary">Set in a care home, this is a powerful, empathetic look at a crumbling  system supporting the elderly...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.standard.co.uk/culture/theatre/quartet-in-autumn-review-arcola-theatre-b1283139.html" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">standard.co.uk</div>
+        <div class="card-title">Quartet in Autumn: Crisply funny study of four lonely office workers</div>
+        <div class="card-summary">This adaptation of Barbara Pym’s novel is a compelling study of ageing workers grappling with meaning...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.broadwayworld.com/houston/article/Photos-First-Look-at-Kyra-Kennedy-and-More-in-BEAUTIFUL-at-TUTS-20260521" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://cloudimages.broadwayworld.com/columnpiccloud/300-8127486bd9a07ed1b060fd17b73278cb.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">broadwayworld.com</div>
+        <div class="card-title">Photos: First Look at Kyra Kennedy and More in BEAUTIFUL at TUTS</div>
+        <div class="card-summary">You can now get a first look at production photos of Beautiful: The Carole King Musical at Theatre Under The Stars, now playing at the Hobby Center....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.broadwayworld.com/article/TWO-STRANGERS-CARRY-A-CAKE-ACROSS-NEW-YORK-to-Launch-North-American-Tour-in-Fall-2027-20260521" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://cloudimages.broadwayworld.com/columnpiccloud/200200-499b8d3ea946e48410937f07fd0cce32.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">broadwayworld.com</div>
+        <div class="card-title">TWO STRANGERS (CARRY A CAKE ACROSS NEW YORK) to Launch North American Tour in Fall 2027</div>
+        <div class="card-summary">Two Strangers (Carry a Cake Across New York) will launch a North American Tour in the fall of 2027. The production will open in Rhode Island, before touring to cities across the U.S. and Canada....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a></div>
+        </div>
+        <div class="cat-section" id="cat-celebrity" style="display:none">
+          <div class="cat-header"><h2>Celebrity</h2></div>
+          <div class="articles-grid">
+    <a class="article-card" href="https://www.eonline.com/news/1432208/best-babydoll-dresses-for-summer-are-on-sale-for-memorial-day?cmpid=rss-syndicate-genericrss-us-top_stories" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://akns-images.eonline.com/eol_images/Entire_Site/20260520/99e7a772-a84e-46e4-9f08-d823aa904812_1779319648.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">eonline.com</div>
+        <div class="card-title">The Babydoll Dress Is Summer’s Most-Wanted Trend—We Found Them on Sale</div>
+        <div class="card-summary">Olivia Rodrigo single-handedly brought back the babydoll dress, but she&#x27;s not the first to don the trending ensemble. From rock &#x27;n&#x27; roll legend Courtney Love to &#x27;60s &quot;it girl&...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.eonline.com/news/1432239/betty-boop-movie-quinta-brunson-to-star-as-jazz-age-cartoon-character?cmpid=rss-syndicate-genericrss-us-top_stories" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://akns-images.eonline.com/eol_images/Entire_Site/20260521/f9ef35d3-03fe-4e0d-8fe6-49650b023e2c_1779392796.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">eonline.com</div>
+        <div class="card-title">Quinta Brunson Set to Play Betty Boop in New Movie</div>
+        <div class="card-summary">Quinta Brunson is stepping into one very iconic red dress.
+The Abbott Elementary creator confirmed she will develop and star in an upcoming film about the iconic cartoon character Betty......</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.eonline.com/news/1431573/best-early-memorial-day-weekend-beauty-sales-deals-2026?cmpid=rss-syndicate-genericrss-us-top_stories" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://akns-images.eonline.com/eol_images/Entire_Site/20260521/4005fcc6-932b-46f0-92fe-97ca53a26c50_1779392000.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">eonline.com</div>
+        <div class="card-title">Best Memorial Day Beauty Sales Worth Shopping Now: Amazon to Ulta</div>
+        <div class="card-summary">The best beauty deals have already dropped ahead of Memorial Day weekend. There&#x27;s no need to wait, not when you can shop slashed prices on top-rated products from COSRX, Mane, Ilia, Kosas,......</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.eonline.com/news/1432228/suzanne-morrisons-victim-impact-letter-kenneth-iwamasa-involvement?cmpid=rss-syndicate-genericrss-us-top_stories" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://akns-images.eonline.com/eol_images/Entire_Site/20260521/fa9edcee-dcb4-4c0e-9af6-c48d40851696_1779381296.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">eonline.com</div>
+        <div class="card-title">Matthew Perry's Mom Slams His Assistant’s Actions in Emotional Letter</div>
+        <div class="card-summary">Matthew Perry’s mother Suzanne Morrison has many regrets.
+And chief among them is placing her family’s trust in Kenneth Iwamasa, Perry’s assistant at the time of his 2023 death, who later pleaded......</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.eonline.com/news/1432237/jeff-probst-details-sharing-rizo-velovics-survivor-season-50-axing-early?cmpid=rss-syndicate-genericrss-us-top_stories" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://akns-images.eonline.com/eol_images/Entire_Site/20260521/cf2b635a-dfb2-4124-ac62-c49f6ff5e679_1779390724.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">eonline.com</div>
+        <div class="card-title">Jeff Probst Reacts to Accidentally Spoiling Survivor Season 50 Finale</div>
+        <div class="card-summary">Spoilers for the season 50 finale of Survivor ahead.
+Jeff Probst has officially spoken.
+The longtime Survivor host was at the center of a major blunder during the season 50 live finale on May 20,......</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.eonline.com/news/1432238/nascars-kyle-busch-in-hospital-with-illness-missing-cup-series?cmpid=rss-syndicate-genericrss-us-top_stories" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://akns-images.eonline.com/eol_images/Entire_Site/20260521/5efc9a78-1ef7-4ca8-9ee0-21577d79ed0a_1779391349.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">eonline.com</div>
+        <div class="card-title">NASCAR Driver Kyle Busch Hospitalized Over Severe Illness</div>
+        <div class="card-summary">Kyle Busch is sidelined amid a health scare.
+The NASCAR driver’s family announced the 41-year-old has experienced “a severe illness” that has landed him in the hospital.
+“He is currently......</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.tmz.com/2026/05/21/britney-spears-invites-cops-over-for-lasagna-during-dui-arrest/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">tmz.com</div>
+        <div class="card-title">Britney Spears Invites Cops Over For Lasagna, Pool Time Amid DUI Arrest, on Video</div>
+        <div class="card-summary">Britney Spears had a complete meltdown when she was arrested for DUI ... and the superstar even made cops a very bizarre offer. In CHP footage, obtained by TMZ ... Brit has some serious mood swings, g...</div>
+        <div class="card-footer">
+          <span class="card-date">2026-05-21T13:50</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.tmz.com/2026/05/21/ant-jefe-murder-victim-cause-of-death/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">tmz.com</div>
+        <div class="card-title">'No Jumper' Cohost's Alleged Murder Victim Died From Blunt Force Trauma</div>
+        <div class="card-summary">Carl Welch -- the person who prosecutors claim "No Jumper" podcast cohost Ant Jefe murdered -- died of blunt force trauma in a parking lot ... TMZ has learned. Prosecutors filed legal documents formal...</div>
+        <div class="card-footer">
+          <span class="card-date">2026-05-21T12:37</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.tmz.com/2026/05/21/britney-spears-in-handcuffs-during-dui-arrest-video/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">tmz.com</div>
+        <div class="card-title">Britney Spears Dashcam Shows Cops Cuffing Her After Failing Sobriety Test</div>
+        <div class="card-summary">We're seeing the moment Britney Spears tried -- and failed -- taking a sobriety test and was cuffed by cops during her DUI bust ... in new video obtained by TMZ. We've obtained dashcam footage from Br...</div>
+        <div class="card-footer">
+          <span class="card-date">2026-05-21T11:13</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.tmz.com/2026/05/21/mackenzie-shirilla-called-herself-third-victim-of-car-crash/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">tmz.com</div>
+        <div class="card-title">Mackenzie Shirilla Told Mom In Jail Call She Was 'Third Victim' of Fatal Crash</div>
+        <div class="card-summary">Mackenzie Shirilla wanted to testify in her murder trial, and she planned to tell the jury she was the third victim in a car crash that killed her then-boyfriend and their pal ... at least that's what...</div>
+        <div class="card-footer">
+          <span class="card-date">2026-05-21T12:00</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a></div>
+        </div>
+        <div class="cat-section" id="cat-movies" style="display:none">
+          <div class="cat-header"><h2>Movies</h2></div>
+          <div class="articles-grid">
+    <a class="article-card" href="https://variety.com/2026/biz/news/korean-content-cj-enm-hybe-extraordinary-attorney-woo-1236756341/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/DSC04444-e1779396062160.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Korean Content Leaders Take Stock After a Decade of Growth and Look to Future: ‘Korean Entertainment is Everywhere’</div>
+        <div class="card-summary">The world of Korean entertainment has come a long way since “Gangnum Style” set dancers galloping around the world nearly 15 years ago. Korean content industry leaders on both sides of the Pacific gat...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/film/news/johnny-depp-day-drinker-release-date-1236756113/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2025/04/DayDrinker_Niete_11042025_DSC0440RC_Crop3-e1744668246341.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Johnny Depp, Penelope Cruz’s Action Thriller ‘Day Drinker’ Sets 2027 Release Date</div>
+        <div class="card-summary">&#8220;Day Drinker,&#8221; an action thriller starring Johnny Depp and Penélope Cruz, will sail to theaters in 2027. Lionsgate, which is releasing the film, has set a release of March 26, 2027. &#8220...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/film/news/resurrection-of-the-christ-first-look-release-date-delay-mel-gibson-1236756143/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/ELX_8662-2R_Crop_EDITR3.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Mel Gibson Unveils ‘Resurrection of the Christ’ First Look, Delays Release Dates for Two-Part Biblical Epic</div>
+        <div class="card-summary">Mel Gibson has unveiled the first look at &#8220;The Resurrection of the Christ,&#8221; the director&#8217;s long-delayed follow-up to 2004’s “The Passion of the Christ.&#8221; Filming on the two-part...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/film/festivals/penelope-cruz-los-javis-queer-garcia-lorca-epic-the-black-ball-cannes-ovation-1236741563/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/The-Black-Ball-crew.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Penelope Cruz Lights up Los Javis’ Queer García Lorca Epic ‘The Black Ball,’ Earning 16-Minute Cannes Ovation</div>
+        <div class="card-summary">Javier Ambrossi and Javier Calvo&#8217;s &#8220;The Black Ball&#8221; (La Bola Negra) a queer epic spanning 85 years of Spanish history and inspired by an unfinished fragment by Federico García Lorca,...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/film/news/odyssey-lupita-nyongo-racist-casting-backlash-1236756272/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/GettyImages-2246451289.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">‘The Odyssey’ Star Lupita Nyong’o Responds to Racist Casting Backlash: ‘This Is a Mythological Story’</div>
+        <div class="card-summary">Lupita Nyong&#8217;o is addressing the backlash to her casting as Helen of Troy in Christopher Nolan&#8217;s &#8220;The Odyssey.&#8221; Nyong&#8217;o plays Helen of Troy, the Greek mythological charac...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/film/global/kate-bush-celebrates-winning-first-ever-film-award-1236756038/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/11.5-ANIMATION-3-kate-bush-winner-still.jpeg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Kate Bush Wins First Film Award for Directorial Debut: ‘How Wonderful!’ (EXCLUSIVE)</div>
+        <div class="card-summary">Beloved music icon, Brit Award winner, Grammy nominee and now &#8230; award-winning film director. Kate Bush has set out her stalls as a filmmaker by winning a prize for her directorial debut. The &#8...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.indiewire.com/film/film/inside-out-2-writer-meg-lefauve-pixar-brain-trust-1235017147/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">indiewire.com</div>
+        <div class="card-title">Enter the Pixar Brain Trust with ‘Inside Out 2’ Writer Meg LeFauve</div>
+        <div class="card-summary">It's all about avoiding the "Band-Aid Monster," said LeFauve, who also tells IndieWire about the emotions (like Schadenfreude) and ideas (like Procrastination Land) left out of the Pixar sequel....</div>
+        <div class="card-footer">
+          <span class="card-date">Tue, 18 Jun 2024</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.indiewire.com/gallery/challengers-cast-upcoming-roles/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">indiewire.com</div>
+        <div class="card-title">Where to Watch the Team Behind ‘Challengers’ Next</div>
+        <div class="card-summary">Zendaya, Josh O'Connor, and Mike Faist are soon to be seen on screens everywhere....</div>
+        <div class="card-footer">
+          <span class="card-date">Tue, 14 May 2024</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.indiewire.com/gallery/civil-war-action-sequences-war-movies/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">indiewire.com</div>
+        <div class="card-title">5 War Movies That Paved the Way for ‘Civil War’</div>
+        <div class="card-summary">Five films (and one video game) that A24's 'Civil War' builds on in order to create its immersive action sequences....</div>
+        <div class="card-footer">
+          <span class="card-date">Tue, 16 Apr 2024</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.indiewire.com/gallery/sean-price-williams-book-1000-movies-metrograph/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">indiewire.com</div>
+        <div class="card-title">13 Hidden Gems in Sean Price Williams’ ‘1000 Movies’</div>
+        <div class="card-summary">The first printing of this movie lovers' diary has already sold out but you can still get some movie recs from "The Sweet East" director and cinematographer....</div>
+        <div class="card-footer">
+          <span class="card-date">Fri, 15 Mar 2024</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a></div>
+        </div>
+        <div class="cat-section" id="cat-tv-and-streaming" style="display:none">
+          <div class="cat-header"><h2>TV & Streaming</h2></div>
+          <div class="articles-grid">
+    <a class="article-card" href="https://variety.com/2026/biz/news/korean-content-cj-enm-hybe-extraordinary-attorney-woo-1236756341/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/DSC04444-e1779396062160.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Korean Content Leaders Take Stock After a Decade of Growth and Look to Future: ‘Korean Entertainment is Everywhere’</div>
+        <div class="card-summary">The world of Korean entertainment has come a long way since “Gangnum Style” set dancers galloping around the world nearly 15 years ago. Korean content industry leaders on both sides of the Pacific gat...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/artisans/news/stranger-things-chad-powers-prosthetics-and-transformations-1236755996/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/HNDO_S2_201_FG_00125413_Still105.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">How ‘Fallout,’ ‘Chad Powers and ‘Stranger Things’ Makeup and VFX Artists Went all in on Prosthetics and Transformations</div>
+        <div class="card-summary">This season, makeup artists have transformed actors using everything from sublime touches to complete prosthetics. Underneath it all, no matter how many hours and prosthetic pieces, they have one comm...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/tv/news/yale-tender-american-flake-dances-with-films-line-up-1236756221/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/YALE.jpeg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">‘Yale,’ ‘Tender’ and ‘American Flake’ Among Dances With Films: LA’s 2026 Line-Up (EXCLUSIVE)</div>
+        <div class="card-summary">Jay Silverman’s “Yale,” Adam Hoelzel’s “Tender” and Andrew David Paterson’s “American Flake” are among the titles set to screen during Dances With Films: LA. Los Angeles’ largest indie film-focused fe...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/film/global/sao-paulo-state-attracts-zero-k-launches-20-year-plan-1236755823/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/04/VARIETY-SIZING-32.png')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">São Paulo Attracts Big International Shoots Like Michael Almereyda’s ‘Zero K’ as State Readies to Launch 20 Year Plan to Ensure Industry Stability</div>
+        <div class="card-summary">Despite Brazil not having this yaer a film at Cannes&#8217; major sections from a Brazilian director, representatives from the Latin American country still arrived confidently at the Marché du Film to...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/tv/news/life-is-strange-tv-series-tom-cullen-hailey-castillo-teague-1236756071/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/Life-Is-Strange-Amazon-cast.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">‘Life Is Strange’ TV Series Casts Tom Cullen, Leisha Hailey, Raúl Castillo, Owen Teague (EXCLUSIVE)</div>
+        <div class="card-summary">The &#8220;Life Is Strange&#8221; TV series adaptation at Amazon Prime Video is building out its main cast. Variety has learned exclusively that Tom Cullen, Leisha Hailey, Raúl Castillo, and Owen Teag...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/film/columns/billy-eichner-real-voice-memoir-billy-on-the-street-1236755924/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/GettyImages-2214208191.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Billy Eichner on Wanting His ‘Real Voice’ to Be Heard in ‘Extremely Personal’ Audio-Only Memoir and ‘People Begging’ Him to Bring Back ‘Billy on the Street’</div>
+        <div class="card-summary">Billy Eichner knows he has a reputation for being loud, brash and in-your-face. When you find fame yelling questions at strangers on New York City streets as he did as the host of “Billy on the Street...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.tvline.com/2178922/survivor-greece-end-early-contestant-injury-stavros-floros/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://www.tvline.com/img/gallery/survivor-greece-forced-to-end-early-following-serious-contestant-injury/l-intro-1779390710.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">tvline.com</div>
+        <div class="card-title">Survivor Greece Forced To End Early Following Serious Contestant Injury</div>
+        <div class="card-summary">The reality series - which is distinct from its American counterpart - wrapped for the season after a competitor lost part of his leg in an off-camera accident....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.tvline.com/2177423/best-coming-of-age-tv-shows-ranked/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://www.tvline.com/img/gallery/15-best-coming-of-age-tv-shows-of-all-time-ranked/l-intro-1779255074.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">tvline.com</div>
+        <div class="card-title">15 Best Coming-Of-Age TV Shows Of All Time, Ranked</div>
+        <div class="card-summary">Coming-of-age stories are often some of the most timeless. Here are 15 phenomenal examples, shows that should be watched ASAP, ranked....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.tvline.com/2178847/survivor-50-aubry-bracco-winner-exit-interview/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://www.tvline.com/img/gallery/survivor-50-aubry-bracco-winner-exit-interview/l-intro-1779390100.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">tvline.com</div>
+        <div class="card-title">Survivor 50 Winner On The Moment She Felt Most In Danger: 'I Felt Like I Had No Shot'</div>
+        <div class="card-summary">The winner of Survivor 50 speaks!...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.tvline.com/2178812/saturday-night-live-stars-who-hosted-most-times/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://www.tvline.com/img/gallery/15-stars-who-have-hosted-snl-the-most-times/l-intro-1779318245.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">tvline.com</div>
+        <div class="card-title">15 Stars Who Have Hosted SNL The Most Times</div>
+        <div class="card-summary">Hosting SNL must be a lot of fun, because these celebs have come back to do it a whole bunch of times....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a></div>
+        </div>
+        <div class="cat-section" id="cat-music" style="display:none">
+          <div class="cat-header"><h2>Music</h2></div>
+          <div class="articles-grid">
+    <a class="article-card" href="https://variety.com/2026/biz/news/korean-content-cj-enm-hybe-extraordinary-attorney-woo-1236756341/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/DSC04444-e1779396062160.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Korean Content Leaders Take Stock After a Decade of Growth and Look to Future: ‘Korean Entertainment is Everywhere’</div>
+        <div class="card-summary">The world of Korean entertainment has come a long way since “Gangnum Style” set dancers galloping around the world nearly 15 years ago. Korean content industry leaders on both sides of the Pacific gat...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/film/global/kate-bush-celebrates-winning-first-ever-film-award-1236756038/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/11.5-ANIMATION-3-kate-bush-winner-still.jpeg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Kate Bush Wins First Film Award for Directorial Debut: ‘How Wonderful!’ (EXCLUSIVE)</div>
+        <div class="card-summary">Beloved music icon, Brit Award winner, Grammy nominee and now &#8230; award-winning film director. Kate Bush has set out her stalls as a filmmaker by winning a prize for her directorial debut. The &#8...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/music/news/americana-awards-honors-nominees-margo-price-brandi-carlile-1236756002/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/MixCollage-21-May-2026-11-06-AM-7410.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Margo Price, Brandi Carlile, I’m With Her, S.G. Goodman Score Multiple Nominations for Americana Honors & Awards</div>
+        <div class="card-summary">The Americana Honors &#38; Awards nominees for 2026 have been announced, with Brandi Carlile, Margo Price, I&#8217;m With Her, S.G. Goodman, Mon Rovia and Ken Pomeroy all scoring two nominations each ...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/music/news/will-smith-christina-aguilera-unity-concert-for-america-1236756111/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/FotoJet-4-2-e1779384519590.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Will Smith, Christina Aguilera, the Roots and More to Perform at Philadelphia’s ‘Unity Concert for America’ on July 4</div>
+        <div class="card-summary">America’s 250 th anniversary this summer may be a bittersweet celebration, but Christina Aguilera, Will Smith, DJ Jazzy Jeff, the Roots, Jill Scott, Seal, State Property, Kathy Sledge, Infinity Song a...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/music/news/coran-capshaw-honored-tj-martell-1236753040/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2023/03/CJP20673-e1779375570742.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Music Industry Moves: Pink Named National Music Publishers’ Association’s 2026 Songwriter Icon</div>
+        <div class="card-summary">In advance of the National Music Publishers&#8217; Association 2026 annual meeting, the organization has named Pink as winner of this year’s Songwriter Icon Award. It has also named Julian Bunetta (so...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/digital/news/spotify-universal-music-licensing-agreements-fan-made-covers-1236755951/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2023/04/Spotify.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Spotify and Universal Music Announce Licensing Agreements for ‘Responsible’ AI-Generated Covers and Remixes</div>
+        <div class="card-summary">Spotify and Universal Music Group have announced a major recorded-music and music-publishing licensing agreements that will enable Spotify to launch a new tool allowing fans to create covers and remix...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.billboard.com/culture/product-recommendations/unplugs-hearing-earplugs-where-to-buy-online-1236247921/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">billboard.com</div>
+        <div class="card-title">Unplugs Protect Your Hearing at Loud Concerts: Here’s How to Buy the Premium Earplugs Online</div>
+        <div class="card-summary">These stylish earplugs make it possible to protect your ears and connect with friends at concerts, sporting events and  busy city streets with just a simple click....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.billboard.com/culture/product-recommendations/harry-styles-pleasing-loop-earplugs-buy-online-1236253316/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">billboard.com</div>
+        <div class="card-title">Harry Styles Drops New Limited-Edition Loop Earplugs: Here’s Where to Buy a Pair Online</div>
+        <div class="card-summary">The line of earplugs is inspired by Styles' latest album Kiss All the Time. Disco, Occasionally....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.billboard.com/music/pop/madonna-confessions-ii-tour-20th-anniversary-post-1236253748/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">billboard.com</div>
+        <div class="card-title">Madonna Reflects on Confessions Tour ‘Part 1’ 20th Anniversary — Leaving Fans Asking If ‘Part 2’ Is Next</div>
+        <div class="card-summary">“Happy 20th anniversary!! Confessions Tour-Part 1,” reads Madonna's Instagram caption....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.billboard.com/music/awards/music-awards-japan-2026-illuminates-future-of-music-1236253908/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">billboard.com</div>
+        <div class="card-title">Protected: From Japan to the World: MUSIC AWARDS JAPAN 2026 Illuminates the Future of Music</div>
+        <div class="card-summary">There is no excerpt because this is a protected post....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a></div>
+        </div>
+        <div class="cat-section" id="cat-awards" style="display:none">
+          <div class="cat-header"><h2>Awards</h2></div>
+          <div class="articles-grid">
+    <a class="article-card" href="https://variety.com/2026/film/opinion/obsession-inde-navarrette-awards-1236752366/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/MCDOBSE_UC010.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">‘Obsession’ Star Inde Navarrette Delivers a Scary and Tragic Performance That Demands Awards Attention</div>
+        <div class="card-summary">SPOILER ALERT: This article contains spoilers for “Obsession,” now playing in theaters. The best movie villains inspire empathy or understanding in an audience: Maybe they profoundly believe what they...</div>
+        <div class="card-footer">
+          <span class="card-date">Mon, 18 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/awards/awards/hannah-einbinder-jane-schoenbrun-provincetown-fest-1236749533/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/PicFrame-A831E76B-69CD-4A71-9881-540BCA63E15F.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Hannah Einbinder and Jane Schoenbrun to Be Honored at Provincetown International Film Festival (EXCLUSIVE)</div>
+        <div class="card-summary">This year’s edition of the Provincetown International Film Festival will present the Next Wave Award to Jane Schoenbrun and Hannah Einbinder. The honor recognizes those who have exciting and distincti...</div>
+        <div class="card-footer">
+          <span class="card-date">Fri, 15 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/awards/news/tv-drama-writers-ending-shows-fan-reactions-1236747784/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/JCO12388.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">TV Drama Writers Detail Difficulties of Ending a Hit Show,  How Much to Plan Ahead and Becoming ‘Emotion Dealers’ for Audiences</div>
+        <div class="card-summary">Ending a show is not easy —&#160;and the process is different for everyone. That was just one lesson learned during the drama series panel at the Variety A Night in the Writers&#8217; Room event in Lo...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 14 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/awards/news/delroy-lindo-to-receive-spirit-of-justice-award-ldf-1236740962/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/GettyImages-2270482380.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Delroy Lindo to Be Honored at 2026 Legal Defense Fund National Equal Justice Awards Dinner Hosted by Leslie Odom, Jr. (EXCLUSIVE)</div>
+        <div class="card-summary">The Legal Defense Fund will honor Delroy Lindo, Gabrielle Kirk McDonald and Delta Sigma Theta Sorority, Inc. at its 38th National Equal Justice Awards Dinner on May 14 in New York City. The annual eve...</div>
+        <div class="card-footer">
+          <span class="card-date">Tue, 12 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/tv/awards/variety-high-tea-glatter-fogel-aniello-voros-joy-bravo-1236739407/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/VARIETY_TEA_TIME_ClarkStudio_0001040.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">High Tea and Dish With Directors: Six Top Emmy Contenders Talk About Their Craft, Wearing Multiple Hats and Embracing the Best Idea</div>
+        <div class="card-summary">They compared notes on shooting days, wearing multiple hats on set and the confidence it takes to fully embrace the concept that the best idea wins. Six top directors gathered Tuesday to kick off Vari...</div>
+        <div class="card-footer">
+          <span class="card-date">Wed, 06 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/scene/columns/annette-bening-kara-swisher-honored-lambda-legals-liberty-awards-national-dinner-1236735258/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/04/IMG_3053.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Annette Bening and Kara Swisher to Be Honored at Lambda Legal’s Liberty Awards National Dinner (EXCLUSIVE)</div>
+        <div class="card-summary">Annette Bening and journalist Kara Swisher will each receive Lambda Liberty Awards at Lambda Legal’s Liberty Awards National Dinner during LGBTQ Pride Month in New York City. “We are delighted to pres...</div>
+        <div class="card-footer">
+          <span class="card-date">Fri, 01 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.hollywoodreporter.com/tv/tv-news/kerry-washington-spotlight-tribute-gotham-tv-awards-1236602399/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">hollywoodreporter.com</div>
+        <div class="card-title">Kerry Washington to Receive Spotlight Tribute at Gotham TV Awards (Exclusive)</div>
+        <div class="card-summary">The 'Imperfect Women' star will be honored for her Emmy-winning career as an actress and producer in such projects as 'Scandal,' 'Little Fires Everywhere' and 'Django Unchained.'...</div>
+        <div class="card-footer">
+          <span class="card-date">Wed, 20 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.hollywoodreporter.com/lifestyle/arts/tituss-burgess-laura-benanti-to-host-tony-awards-preshow-1236602382/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">hollywoodreporter.com</div>
+        <div class="card-title">Tituss Burgess, Laura Benanti To Host Tony Awards Preshow</div>
+        <div class="card-summary">The Broadway veterans will emcee 'The Tony Awards: Act One,' which presents the first round of Tony Awards....</div>
+        <div class="card-footer">
+          <span class="card-date">Wed, 20 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.hollywoodreporter.com/news/general-news/2026-bet-awards-nominations-list-1236600959/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">hollywoodreporter.com</div>
+        <div class="card-title">BET Awards Nominations Revealed: Cardi B Leads With Six</div>
+        <div class="card-summary">Kendrick Lamar and Mariah the Scientist each earned five nods, with Doechii, Doja Cat, Clipse, Teyana Taylor, Olivia Dean and Latto scoring four apiece....</div>
+        <div class="card-footer">
+          <span class="card-date">Tue, 19 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.hollywoodreporter.com/lifestyle/lifestyle-news/elton-john-impact-awards-lgbtq-icons-1236598718/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">hollywoodreporter.com</div>
+        <div class="card-title">Elton John Impact Awards to Honor LGBTQ+ Icons and Trailblazers Including Jonathan Bailey and Chappell Roan</div>
+        <div class="card-summary">iHeartMedia and Procter &#38; Gamble have teamed up for the event, which will also honor Laverne Cox, Melissa Etheridge, Billie Jean King and Orville Peck in a special that will launch as a podcast se...</div>
+        <div class="card-footer">
+          <span class="card-date">Mon, 18 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a></div>
+        </div>
+        <div class="cat-section" id="cat-box-office" style="display:none">
+          <div class="cat-header"><h2>Box Office</h2></div>
+          <div class="articles-grid">
+    <a class="article-card" href="https://variety.com/2026/film/box-office/michael-box-office-mandalorian-and-grogu-summer-movies-1236752971/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/02/THND-FF-000439_4cef52.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">LISTEN: ‘Michael’ Returns to No. 1 at the Box Office as Exhibitors Brace for ‘The Mandalorian and Grogu’ and the Start of Summer Blockbuster Season</div>
+        <div class="card-summary">On today’s episode of &#8220;Daily Variety&#8221; podcast, in our Box Office segment, Variety’s Rebecca Rubin explains why Lionsgate’s “Michael” made a surprise return to No. 1 in a weekend that marks...</div>
+        <div class="card-footer">
+          <span class="card-date">Mon, 18 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/film/box-office/korea-box-office-michael-devil-wears-prada-2-1236752098/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/04/maven-unit-240504-00234rc-crop3.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Korea Box Office: Michael Jackson Biopic ‘Michael’ Dominates Weekend with Over 50% Market Share</div>
+        <div class="card-summary">The Michael Jackson biographical drama &#8220;Michael&#8221; comfortably claimed the top position at the South Korean box office during the weekend of May 15–17. According to data from KOBIS, the trac...</div>
+        <div class="card-footer">
+          <span class="card-date">Mon, 18 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/film/box-office/china-box-office-dear-you-sheep-detectives-1236752096/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/05/Dear-You.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">China Box Office: ‘Dear You’ Holds Top Spot as ‘The Sheep Detectives’ Enters Top Five</div>
+        <div class="card-summary">Jinant Film &#38; TV’s family drama “Dear You” retained its position at the top of the China box office during the May 15–17 weekend, pulling in RMB282 million ($41.5 million), according to data from ...</div>
+        <div class="card-footer">
+          <span class="card-date">Mon, 18 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/film/box-office/michael-box-office-milestone-700-million-devil-wears-prada-2-1236751625/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/04/maven-unit-240504-00234rc-crop3.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">‘Michael’ Surpasses $700 Million Globally, ‘Devil Wears Prada 2’ Nears $550 Million Milestone</div>
+        <div class="card-summary">Can&#8217;t stop the King of Pop. &#8220;Michael,&#8221; a biopic about the musical icon, has cleared a major box office milestone with more than $700 million globally. Over the weekend, the film retu...</div>
+        <div class="card-footer">
+          <span class="card-date">Sun, 17 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/film/box-office/box-office-michael-reclaims-first-place-obsession-starts-strong-1236751550/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/04/maven-trailer-grab-00001r2.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">Box Office: ‘Michael’ Returns to No. 1 in Fourth Weekend, ‘Obsession’ Starts Strong With $16 Million</div>
+        <div class="card-summary">&#8220;Michael&#8221; has moonwalked back to No. 1 at the domestic box office, earning a strong $26 million in its fourth weekend of release. In a sign of its remarkable staying power, &#8220;Michael&...</div>
+        <div class="card-footer">
+          <span class="card-date">Sun, 17 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://variety.com/2026/film/box-office/the-devil-wears-prada-2-michael-uk-ireland-box-office-1236745924/" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://variety.com/wp-content/uploads/2026/04/TDWP2-25797_R.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">variety.com</div>
+        <div class="card-title">‘The Devil Wears Prada 2’ Struts to Second Week Victory at U.K. and Ireland Box Office</div>
+        <div class="card-summary">The U.K. and Ireland box office saw a fashionable hold as Disney&#8217;s &#8220;The Devil Wears Prada 2&#8221; retained its first-place position, collecting £5.2 million ($7 million) over the weekend....</div>
+        <div class="card-footer">
+          <span class="card-date">Tue, 12 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.hollywoodreporter.com/movies/movie-news/star-wars-the-mandalorian-and-grogu-box-office-1236601814/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">hollywoodreporter.com</div>
+        <div class="card-title">‘Star Wars: The Mandalorian and Grogu’ Targets $80M-Plus U.S. Box Office Launch Amid Scrutiny Heavier Than Jabba the Hutt</div>
+        <div class="card-summary">Jon Favreau's feature adaptation of his Disney+ series is making a big play for families thanks to Grogu, aka Baby Yoda....</div>
+        <div class="card-footer">
+          <span class="card-date">Wed, 20 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.hollywoodreporter.com/movies/movie-news/michael-returns-no-1-box-office-obsession-win-1236597618/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">hollywoodreporter.com</div>
+        <div class="card-title">Box Office Thriller: ‘Michael’ Sashays Past ‘Prada 2’ With Stunning $26M After Returning to Imax and Other Premium Screens</div>
+        <div class="card-summary">Elsewhere, Curry Barker's horror pic 'Obsession' opened well ahead of expectations with $16 million, while the Michael Jackson biopic was among a number of holdovers celebrating major milestones as it...</div>
+        <div class="card-footer">
+          <span class="card-date">Mon, 18 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.hollywoodreporter.com/movies/movie-news/brad-pitt-heart-of-the-beast-release-date-1236595201/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">hollywoodreporter.com</div>
+        <div class="card-title">Brad Pitt’s ‘Heart of the Beast’ Sailing Into Theaters in Late September</div>
+        <div class="card-summary">David Ayer is directing the survival action movie for Paramount Pictures....</div>
+        <div class="card-footer">
+          <span class="card-date">Wed, 13 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.hollywoodreporter.com/movies/movie-news/mortal-kombat-ii-box-office-battle-devil-wears-prada-2-1236591049/" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">hollywoodreporter.com</div>
+        <div class="card-title">Box Office: ‘Devil Wears Prada 2’ Sews Up Mother’s Day Victory Over ‘Mortal Kombat II,’ Crosses $433M Globally</div>
+        <div class="card-summary">In only its second weekend, the 'Prada' sequel has already passed up the entire lifetime run of the original 2006 movie as Disney becomes the first Hollywood studio the year to clear the $2 billion ma...</div>
+        <div class="card-footer">
+          <span class="card-date">Sun, 10 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a></div>
+        </div>
+        <div class="cat-section" id="cat-reviews" style="display:none">
+          <div class="cat-header"><h2>Reviews</h2></div>
+          <div class="articles-grid">
+    <a class="article-card" href="https://www.rogerebert.com/festivals/cannes-2026-dua-flesh-and-fuel-six-months-in-a-pink-and-blue-building" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">rogerebert.com</div>
+        <div class="card-title">Cannes 2026: Dua, Flesh and Fuel, Six Months in a Pink and Blue Building</div>
+        <div class="card-summary">On three pictures that highlighted Cannes Critics' Week sidebar....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.rogerebert.com/festivals/cannes-2026-video-7-festival-dispatch-with-jason-gorber" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">rogerebert.com</div>
+        <div class="card-title">Cannes 2026 Video #7: Festival Dispatch with Jason Gorber</div>
+        <div class="card-summary">Jason Gorber reflects on his time at the fest so far....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.rogerebert.com/streaming/netflix-the-boroughs-tv-review-2026" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">rogerebert.com</div>
+        <div class="card-title">Netflix’s “The Boroughs” Offers a Clever Spin on the “Stranger Things” Formula</div>
+        <div class="card-summary">Refreshingly more than just "Elder Things."...</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.rogerebert.com/festivals/cannes-2026-the-man-i-love-orange-flavoured-wedding" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">rogerebert.com</div>
+        <div class="card-title">Cannes 2026: The Man I Love, Orange-Flavoured Wedding</div>
+        <div class="card-summary">Ira Sachs and Rami Malek come to Cannes....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.rogerebert.com/festivals/cannes-2026-table-of-contents" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">rogerebert.com</div>
+        <div class="card-title">Cannes 2026: Table of Contents</div>
+        <div class="card-summary">Where to find every piece of our coverage of the 79th Annual Cannes Film Festival....</div>
+        <div class="card-footer">
+          <span class="card-date">Wed, 20 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.rogerebert.com/festivals/cannes-2026-iron-boy-tangles-lucy-lost" target="_blank" rel="noopener">
+      
+      <div class="card-body">
+        <div class="card-source">rogerebert.com</div>
+        <div class="card-title">Cannes 2026: Iron Boy, Tangles, Lucy Lost</div>
+        <div class="card-summary">A first of two dispatches on this year's animated offerings at Cannes, including an excellent new film from a Pixar vet....</div>
+        <div class="card-footer">
+          <span class="card-date">Wed, 20 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.avclub.com/the-boroughs-review-netflix" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://img.pastemagazine.com/wp-content/avuploads/2026/05/19130312/the-boroughs-.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">avclub.com</div>
+        <div class="card-title">In The Boroughs, growing old is both a thrilling adventure and a waking nightmare</div>
+        <div class="card-summary">Alfred Molina and Alfre Woodard anchor Netflix&#039;s Spielberg-inspired sci-fi thriller....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.avclub.com/stephen-colbert-colbert-questionert" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://img.pastemagazine.com/wp-content/avuploads/2026/05/21042108/colbert-questionert.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">avclub.com</div>
+        <div class="card-title">Stephen Colbert finally subjects himself to a ridiculously star-studded Colbert Questionert</div>
+        <div class="card-summary">With the tables turned in his penultimate episode, Colbert fielded queries from Weird Al Yankovic, Robert De Niro, and other famous friends....</div>
+        <div class="card-footer">
+          <span class="card-date">Thu, 21 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.avclub.com/j-k-simmons-the-westies-teaser-trailer-accent" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://img.pastemagazine.com/wp-content/avuploads/2026/05/20222542/jk-simmons-westies.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">avclub.com</div>
+        <div class="card-title">J.K. Simmons has an accent for you in first teaser for MGM+'s The Westies</div>
+        <div class="card-summary">We&#039;re not saying it&#039;s a &lt;i&gt;bad&lt;/i&gt; accent, mind you; just that we wouldn&#039;t want to come across it completely unprepared....</div>
+        <div class="card-footer">
+          <span class="card-date">Wed, 20 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="https://www.avclub.com/the-bear-illinois-government-sandwich-propaganda" target="_blank" rel="noopener">
+      <div class="card-img" style="background-image:url('https://img.pastemagazine.com/wp-content/avuploads/2025/07/02193125/bear49-recap-header.jpg')"></div>
+      <div class="card-body">
+        <div class="card-source">avclub.com</div>
+        <div class="card-title">Illinois government recognizes The Bear's achievements in sandwich propaganda</div>
+        <div class="card-summary">With nothing better apparently on their plates, Illinois legislators acknowledged that FX&#039;s show has made many people hanker for a sandwich....</div>
+        <div class="card-footer">
+          <span class="card-date">Wed, 20 May 2026</span>
+          <span class="card-read">Read →</span>
+        </div>
+      </div>
+    </a></div>
+        </div></div>
+      <aside class="news-sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-title">✦ On The Red Carpet</div>
+          <div class="trending-item"><span class="trending-num">1</span><span class="trending-title">Hollywood film & TV coverage</span></div>
+          <div class="trending-item"><span class="trending-num">2</span><span class="trending-title">Broadway & West End theater</span></div>
+          <div class="trending-item"><span class="trending-num">3</span><span class="trending-title">Nashville country & Americana</span></div>
+          <div class="trending-item"><span class="trending-num">4</span><span class="trending-title">Celebrity news & features</span></div>
+          <div class="trending-item"><span class="trending-num">5</span><span class="trending-title">Awards season coverage</span></div>
+          <div class="trending-item"><span class="trending-num">6</span><span class="trending-title">Box office & streaming</span></div>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-title">✦ Awards Watch</div>
+          <div style='padding:7px 0;border-bottom:1px solid #1a1a1a;'><div style='font-family:var(--display);font-style:italic;font-size:13px;color:var(--cream);'>Tony Awards</div><div style='font-family:var(--sans);font-size:9px;color:var(--gold);letter-spacing:1px;margin-top:2px;'>June 2026 · Broadway</div></div><div style='padding:7px 0;border-bottom:1px solid #1a1a1a;'><div style='font-family:var(--display);font-style:italic;font-size:13px;color:var(--cream);'>CMA Awards</div><div style='font-family:var(--sans);font-size:9px;color:var(--gold);letter-spacing:1px;margin-top:2px;'>November 2026 · Country</div></div><div style='padding:7px 0;border-bottom:1px solid #1a1a1a;'><div style='font-family:var(--display);font-style:italic;font-size:13px;color:var(--cream);'>Emmy Awards</div><div style='font-family:var(--sans);font-size:9px;color:var(--gold);letter-spacing:1px;margin-top:2px;'>September 2026 · Television</div></div><div style='padding:7px 0;border-bottom:1px solid #1a1a1a;'><div style='font-family:var(--display);font-style:italic;font-size:13px;color:var(--cream);'>Academy Awards</div><div style='font-family:var(--sans);font-size:9px;color:var(--gold);letter-spacing:1px;margin-top:2px;'>March 2027 · Film</div></div><div style='padding:7px 0;border-bottom:1px solid #1a1a1a;'><div style='font-family:var(--display);font-style:italic;font-size:13px;color:var(--cream);'>Golden Globes</div><div style='font-family:var(--sans);font-size:9px;color:var(--gold);letter-spacing:1px;margin-top:2px;'>January 2027 · Film/TV</div></div><div style='padding:7px 0;border-bottom:1px solid #1a1a1a;'><div style='font-family:var(--display);font-style:italic;font-size:13px;color:var(--cream);'>Grammy Awards</div><div style='font-family:var(--sans);font-size:9px;color:var(--gold);letter-spacing:1px;margin-top:2px;'>February 2027 · Music</div></div>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-title">✦ Coverage</div>
+          <p style="font-family:var(--body);font-size:13px;color:var(--muted);line-height:1.7;">VelvetRopeDaily covers the full spectrum of global entertainment — from Hollywood blockbusters and Broadway openings to Nashville chart-toppers and London's West End. Updated daily.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div class="page" id="page-awards">
+    <div class="data-page">
+      <h1>Awards Calendar</h1>
+      <div class="subtitle">Global Entertainment Awards · 2026–2027 Season</div>
+      <table class="data-table">
+        <thead><tr><th>Award</th><th>Date</th><th>Venue</th><th>Category</th></tr></thead>
+        <tbody>
+        <tr>
+          <td class='award-name'>Tony Awards</td>
+          <td style='color:#ccc;'>June 2026</td>
+          <td style='color:#aaa;font-size:12px;'>Lincoln Center, NYC</td>
+          <td><span class='cat-pill' style='border-color:#c9a84c;color:#c9a84c;'>Broadway</span></td>
+        </tr>
+        <tr>
+          <td class='award-name'>CMA Awards</td>
+          <td style='color:#ccc;'>November 2026</td>
+          <td style='color:#aaa;font-size:12px;'>Bridgestone Arena, Nashville</td>
+          <td><span class='cat-pill' style='border-color:#8B4513;color:#8B4513;'>Country</span></td>
+        </tr>
+        <tr>
+          <td class='award-name'>Emmy Awards</td>
+          <td style='color:#ccc;'>September 2026</td>
+          <td style='color:#aaa;font-size:12px;'>Peacock Theater, LA</td>
+          <td><span class='cat-pill' style='border-color:#4169E1;color:#4169E1;'>Television</span></td>
+        </tr>
+        <tr>
+          <td class='award-name'>Academy Awards</td>
+          <td style='color:#ccc;'>March 2027</td>
+          <td style='color:#aaa;font-size:12px;'>Dolby Theatre, Hollywood</td>
+          <td><span class='cat-pill' style='border-color:#c9a84c;color:#c9a84c;'>Film</span></td>
+        </tr>
+        <tr>
+          <td class='award-name'>Golden Globes</td>
+          <td style='color:#ccc;'>January 2027</td>
+          <td style='color:#aaa;font-size:12px;'>Beverly Hilton</td>
+          <td><span class='cat-pill' style='border-color:#9B59B6;color:#9B59B6;'>Film/TV</span></td>
+        </tr>
+        <tr>
+          <td class='award-name'>Grammy Awards</td>
+          <td style='color:#ccc;'>February 2027</td>
+          <td style='color:#aaa;font-size:12px;'>Crypto.com Arena, LA</td>
+          <td><span class='cat-pill' style='border-color:#E91E63;color:#E91E63;'>Music</span></td>
+        </tr>
+        <tr>
+          <td class='award-name'>Olivier Awards</td>
+          <td style='color:#ccc;'>April 2027</td>
+          <td style='color:#aaa;font-size:12px;'>Royal Albert Hall, London</td>
+          <td><span class='cat-pill' style='border-color:#2ECC71;color:#2ECC71;'>West End</span></td>
+        </tr>
+        <tr>
+          <td class='award-name'>BAFTA Awards</td>
+          <td style='color:#ccc;'>February 2027</td>
+          <td style='color:#aaa;font-size:12px;'>Royal Festival Hall, London</td>
+          <td><span class='cat-pill' style='border-color:#c9a84c;color:#c9a84c;'>Film</span></td>
+        </tr>
+        <tr>
+          <td class='award-name'>SAG Awards</td>
+          <td style='color:#ccc;'>February 2027</td>
+          <td style='color:#aaa;font-size:12px;'>Shrine Auditorium, LA</td>
+          <td><span class='cat-pill' style='border-color:#9B59B6;color:#9B59B6;'>Film/TV</span></td>
+        </tr>
+        <tr>
+          <td class='award-name'>Cannes Film Festival</td>
+          <td style='color:#ccc;'>May 2027</td>
+          <td style='color:#aaa;font-size:12px;'>Palais des Festivals, Cannes</td>
+          <td><span class='cat-pill' style='border-color:#E74C3C;color:#E74C3C;'>International</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="page" id="page-about">
+    <div class="about-wrap">
+      <h1>About VelvetRopeDaily</h1>
+      <p>VelvetRopeDaily is the premier global entertainment news destination — covering Hollywood films and television, Broadway and West End theater, Nashville's music scene, celebrity culture, awards seasons, box office, and streaming.</p>
+      <p>Every morning our AI-powered pipeline pulls from the world's top entertainment publications — Variety, Deadline, The Hollywood Reporter, Playbill, Broadway World, Billboard, The Stage, NME and more — delivering concise, beautifully written summaries so you never miss a story.</p>
+      <p style="font-size:13px;color:var(--muted);">Content sourced from third-party RSS feeds. All articles link to their original source. VelvetRopeDaily does not claim ownership of any syndicated content.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-logo">VelvetRopeDaily</div>
+  <div>© 2026 VelvetRopeDaily · Powered by Claude AI · Updated Daily</div>
+  <div style="font-size:9px;color:#333;margin-top:4px;">Content sourced from third-party RSS feeds · All articles link to original sources</div>
+</footer>
+
+<script>
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+function showCat(catId) {
+  document.querySelectorAll('.cat-section').forEach(s => s.style.display = 'none');
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  var el = document.getElementById('cat-' + catId);
+  if (el) el.style.display = 'block';
+  var btn = document.getElementById('catbtn-' + catId);
+  if (btn) btn.classList.add('active');
+}
+</script>
+</body>
+</html>
