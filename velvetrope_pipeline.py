@@ -300,7 +300,7 @@ def build_html(articles_by_category):
     --text: #ddd8cc;
     --muted: #7a7670;
     --display: 'Playfair Display', Georgia, serif;
-    --body: 'Cormorant Garamond', Georgia, serif;
+    --body: 'Georgia', Georgia, serif;
     --sans: 'Montserrat', Helvetica, sans-serif;
   }}
   *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
