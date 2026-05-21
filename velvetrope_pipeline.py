@@ -423,7 +423,7 @@ def build_html(articles_by_category):
   }}
   .cat-btn {{
     font-family: var(--sans); font-size: 9px; font-weight: 600;
-    color: var(--muted); background: transparent;
+    color: var(--black); background: var(--gold);
     border: 1px solid var(--border); padding: 5px 13px;
     cursor: pointer; white-space: nowrap; text-transform: uppercase;
     letter-spacing: 1px; transition: all 0.15s;
