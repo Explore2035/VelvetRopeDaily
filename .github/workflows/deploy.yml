@@ -26,7 +26,7 @@ jobs:
       - name: Run VelvetRopeDaily pipeline
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python pipeline.py
+        run: python velvetrope_pipeline.py
 
       - name: Commit & push index.html
         run: |
