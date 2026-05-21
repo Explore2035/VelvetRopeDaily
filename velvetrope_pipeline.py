@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+ #!/usr/bin/env python3
 """
 VelvetRopeDaily - Global Entertainment News Pipeline
 Hollywood · Broadway · Nashville · West End · Celebrity · Awards
@@ -616,15 +616,6 @@ def build_html(articles_by_category):
     <div class="news-layout">
       <div class="news-main">{category_sections}</div>
       <aside class="news-sidebar">
-        <div class="sidebar-section">
-          <div class="sidebar-title">✦ On The Red Carpet</div>
-          <div class="trending-item"><span class="trending-num">1</span><span class="trending-title">Hollywood film & TV coverage</span></div>
-          <div class="trending-item"><span class="trending-num">2</span><span class="trending-title">Broadway & West End theater</span></div>
-          <div class="trending-item"><span class="trending-num">3</span><span class="trending-title">Nashville country & Americana</span></div>
-          <div class="trending-item"><span class="trending-num">4</span><span class="trending-title">Celebrity news & features</span></div>
-          <div class="trending-item"><span class="trending-num">5</span><span class="trending-title">Awards season coverage</span></div>
-          <div class="trending-item"><span class="trending-num">6</span><span class="trending-title">Box office & streaming</span></div>
-        </div>
         <div class="sidebar-section">
           <div class="sidebar-title">✦ Awards Watch</div>
           {''.join(f"<div style='padding:7px 0;border-bottom:1px solid #1a1a1a;'><div style='font-family:var(--display);font-style:italic;font-size:13px;color:var(--cream);'>{a['award']}</div><div style='font-family:var(--sans);font-size:9px;color:var(--gold);letter-spacing:1px;margin-top:2px;'>{a['date']} · {a['category']}</div></div>" for a in AWARDS_CALENDAR[:6])}
