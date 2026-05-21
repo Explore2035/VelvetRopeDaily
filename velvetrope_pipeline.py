@@ -300,7 +300,7 @@ def build_html(articles_by_category):
     --text: #ddd8cc;
     --muted: #7a7670;
     --display: 'Playfair Display', Georgia, serif;
-    --body: 'Georgia', Georgia, serif;
+    --body: 'Cormorant Garamond', Georgia, serif;
     --sans: 'Montserrat', Helvetica, sans-serif;
   }}
   *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
@@ -421,17 +421,17 @@ def build_html(articles_by_category):
     background: var(--dark2); border-bottom: 1px solid var(--border);
     padding: 10px 20px; display: flex; gap: 6px; overflow-x: auto;
   }}
-  .cat-btn {
-  font-family: var(--sans); font-size: 9px; font-weight: 600;
-  color: var(--black); background: var(--gold);
-  border: 1px solid var(--gold); padding: 5px 13px;
-  cursor: pointer; white-space: nowrap; text-transform: uppercase;
-  letter-spacing: 1px; transition: all 0.15s;
-}
-.cat-btn:hover, .cat-btn.active {
-  background: var(--gold); color: var(--black); border-color: var(--gold);
-  opacity: 0.8;
-}
+  .cat-btn {{
+    font-family: var(--sans); font-size: 9px; font-weight: 600;
+    color: var(--black); background: var(--gold);
+    border: 1px solid var(--gold); padding: 5px 13px;
+    cursor: pointer; white-space: nowrap; text-transform: uppercase;
+    letter-spacing: 1px; transition: all 0.15s;
+  }}
+  .cat-btn:hover, .cat-btn.active {{
+    background: var(--gold); color: var(--black); border-color: var(--gold);
+    opacity: 0.85;
+  }}
 
   /* ARTICLE GRID — magazine style with images */
   .articles-grid {{
